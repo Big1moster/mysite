@@ -1,0 +1,79 @@
+{% load staticfiles%}{#加载静态文件库，就可以使用静态文件#}
+<!DOCTYPE html>
+<html lang="zh-CN">  {# 语言设置为中文#}
+<head>
+	<meta charset="UTF-8">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">{# 告诉ie浏览器使用聚型的内核 #}
+    <meta name="viewport" content="width=device-width, initial-scale=1">  {# ，响应式，适应屏幕，根据屏幕自动调整#}
+
+	<title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    {#static目录下的base.css#}
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css'%}">
+
+    <script type="text/javascript" src="{% static 'jquery.1.12.4.min.js' %}"></script>
+    {# jq要放在js前面#}
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    {% block header_extends %}{% endblock %}
+</head>
+<body>
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">{# 如果不是nav标签就要加上role="navigation"#}
+		<div class="container-fluid">    {#响应式布局需要的容器,用于 100% 宽度，占据全部视口（viewport）的容器#}
+			<div class="navbar-header">
+				<a href="{% url 'home' %}" class="navbar-brand">个人博客网站</a>
+				<button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">	{# 对应下面的id #}
+					<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>    {# 按钮的三条杠 #}
+                    <span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="navbar-collapse" class="collapse navbar-collapse" >
+				<ul class="nav navbar-nav">
+				    <li class="{% block nav_home_active %}{% endblock %}"><a href="{% url 'home' %}">首页</a></li>
+				    <li class="{% block nav_blog_active %}{% endblock %}"><a href="{% url 'blog_list' %}">博客</a></li>
+			    </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if not user.is_authenticated %}
+                        <li><a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a></li>
+                        <li><a href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a></li>
+                    {% else %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">{{user.username}} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'user_info' %}">个人资料</a></li>
+{#                                django自带的url#}
+                                {% if user.is_stuff %}
+                                <li><a href="{% url 'admin:index' %}">后台管理</a></li>
+                                 {% endif %}
+{#                                分割线#}
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'logout' %}?from={{ request.get_full_path }}">退出</a></li>
+                            </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+			</div>
+			
+		</div>
+	</div>
+
+
+
+{% comment %}
+这是未使用bootstrap时的导栏行
+	 <div class="nav">
+	 	<a class="logo" href="{% url 'home' %}">
+	 		 <h3>个人博客网站</h3>
+	 	</a>
+	 	<a href="{% url 'home' %}">首页</a>
+	 	<a href="{% url 'blog_list' %}">博客</a>
+    </div>
+ {% endcomment %}
+
+    {% block content %}{% endblock %}
+
+{% block ajax_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends 'blog/blog_list.html' %}     {# 引用这个基文件，并将内容填入空缺的块中#}
+
+{% block title %}
+    {# 页面标题#}
+    {{blog_type.type_name}}
+{% endblock %}
+
+{% block blog_list_title %}
+   日期归档：{{blogs_with_date}}
+   <a href="{% url 'blog_list' %}">查看全部博客</a>
+{% endblock%}
+
+

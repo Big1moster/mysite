@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}
+    个人资料
+{% endblock %}
+
+{% block nav_home_active %}
+    active
+{% endblock %}
+
+{% block content %}
+    {#    {% url 'login' %}  就在当前页面提交，不用加#}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+
+            {% if user.is_authenticated %}
+
+                <h2>{{ user.username }}</h2>
+                <ul>
+                    <li>昵称: <a href="javascript:void(0);" onclick="changeName()">
+                        <span class="glyphicon glyphicon-wrench"></span>
+                        <span>修改昵称</span></a></li>
+                    <li>邮箱:  {% if user.email %}{{ user.email }}{% else %}未绑定{% endif %}</li>
+                    <li>上一次登录时间:  {{ user.last_login|date:"Y-m-d H:i:s" }}</li>
+                    <li><a href="">修改密码</a></li>
+                </ul>
+
+             {% else %}
+
+{#                <span>未登录，跳转到首页...</span>#}
+                <script>
+                window.location.href = '/';
+{#                setTimeout(function () {#}
+{#                    window.location.href = '/';#}
+{#                },5000);#}
+
+                </script>
+            {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block ajax_scripts %}
+    <script>
+        function changeName() {
+
+        }
+    </script>
+{% endblock %}
